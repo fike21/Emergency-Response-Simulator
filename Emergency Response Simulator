@@ -1,0 +1,131 @@
+using System;
+using System.Collections.Generic;
+
+namespace EmergencyResponseSimulator
+{
+    abstract class EmergencyUnit
+    {
+        public string Name { get; set; }
+        public int Speed { get; set; }
+
+        public EmergencyUnit(string name, int speed)
+        {
+            Name = name;
+            Speed = speed;
+        }
+
+        public abstract bool CanHandle(string incidentType);
+        public abstract void RespondToIncident(Incident incident);
+    }
+
+    class Incident
+    {
+        public string Type { get; set; }
+        public string Location { get; set; }
+
+        public Incident(string type, string location)
+        {
+            Type = type;
+            Location = location;
+        }
+    }
+
+    class Police : EmergencyUnit
+    {
+        public Police(string name, int speed) : base(name, speed) { }
+
+        public override bool CanHandle(string incidentType)
+        {
+            return incidentType == "Crime";
+        }
+
+        public override void RespondToIncident(Incident incident)
+        {
+            Console.WriteLine($"{Name} is handling a crime at {incident.Location}.");
+        }
+    }
+
+    class Firefighter : EmergencyUnit
+    {
+        public Firefighter(string name, int speed) : base(name, speed) { }
+
+        public override bool CanHandle(string incidentType)
+        {
+            return incidentType == "Fire";
+        }
+
+        public override void RespondToIncident(Incident incident)
+        {
+            Console.WriteLine($"{Name} is extinguishing fire at {incident.Location}.");
+        }
+    }
+
+    class Ambulance : EmergencyUnit
+    {
+        public Ambulance(string name, int speed) : base(name, speed) { }
+
+        public override bool CanHandle(string incidentType)
+        {
+            return incidentType == "Medical";
+        }
+
+        public override void RespondToIncident(Incident incident)
+        {
+            Console.WriteLine($"{Name} is treating patients at {incident.Location}.");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<EmergencyUnit> units = new List<EmergencyUnit>
+            {
+                new Police("Police Unit 1", 80),
+                new Firefighter("Firefighter Unit 1", 70),
+                new Ambulance("Ambulance Unit 1", 90)
+            };
+
+            string[] incidentTypes = { "Crime", "Fire", "Medical" };
+            string[] locations = { "Downtown", "City Hall", "Suburbs", "Industrial Park", "Mall" };
+
+            Random random = new Random();
+            int score = 0;
+
+            for (int i = 1; i <= 5; i++)
+            {
+                Console.WriteLine($"\n--- Turn {i} ---");
+
+                string randomType = incidentTypes[random.Next(incidentTypes.Length)];
+                string randomLocation = locations[random.Next(locations.Length)];
+
+                Incident newIncident = new Incident(randomType, randomLocation);
+                Console.WriteLine($"Incident: {newIncident.Type} at {newIncident.Location}");
+
+                bool handled = false;
+
+                foreach (var unit in units)
+                {
+                    if (unit.CanHandle(newIncident.Type))
+                    {
+                        unit.RespondToIncident(newIncident);
+                        score += 10;
+                        handled = true;
+                        break;
+                    }
+                }
+
+                if (!handled)
+                {
+                    Console.WriteLine("No unit available to handle the incident.");
+                    score -= 5;
+                }
+
+                Console.WriteLine($"Current Score: {score}");
+            }
+
+            Console.WriteLine($"\nFinal Score: {score}");
+            Console.WriteLine("Simulation ended.");
+        }
+    }
+}
