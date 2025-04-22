@@ -13,9 +13,7 @@
  ```bash
  dotnet run
  ```
- 📋 Requirements
- - .NET 6.0+
- - Visual Studio 2022 (recommended)
+
  📊 Class Diagram
  ```mermaid
  classDiagram
