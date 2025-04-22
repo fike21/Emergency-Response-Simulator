@@ -1,6 +1,6 @@
 #🚒 Emergency Response Simulator
  
- Author: [Fikire Tibebu]  
+ [Fikire Tibebu]  
  
  📝 Description
  C# console application simulating emergency unit dispatch to random city incidents, demonstrating OOP principles.
